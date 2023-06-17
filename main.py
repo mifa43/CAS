@@ -1,48 +1,24 @@
-import PyPDF2
-import pandas as pd
-from unstdlib.standard.contextlib_ import open_atomic
-
-pdf_path = "ZA 14 GODINA LJUBILEJA (1).pdf"
-excel_data = "kontakti.ods"
-new_file = "/home/mifa43/Desktop/CAS/newFile.pdf"
+from bs4 import BeautifulSoup
 
 
-def read_pdf(pdf_data, new_file):
+html_path = '/home/mifa43/Desktop/CAS/htmlStructure/jubilej-14.html'
+new_file_name = 'index.html'
 
-    page_text_list = []
+def modify_HTML(source_html, new_html_name):
+    mapped_html = {
+        "target_tag": "div",
+        "target_class": "t m0 x1 h7 y14 ff1 fs2 fc0 sc0 ls4 ws3",
 
-    with open(pdf_path, "rb") as pdf_data:
+    }
+    with open(source_html, 'r') as file:
+        fcontent = file.read()
 
-        try:
-            pdf_writer = PyPDF2.PdfWriter()
-            
-            pdf_reader = PyPDF2.PdfReader(pdf_data)
+    soup = BeautifulSoup(fcontent, 'html.parser')
 
-            page_num = len(pdf_reader.pages) 
+    target_div = soup.find('div', class_='t m0 x1 h7 y14 ff1 fs2 fc0 sc0 ls4 ws3')
+    target_div.string.replace_with('g. Milos Zlatkovic')
 
-            for num in range(0, page_num):
+    with open(new_html_name, 'w') as file:
+        file.write(str(soup))
 
-                page_object = pdf_reader.pages[num] 
-
-                pdf_text = page_object.extract_text()
-
-                # page_text_list.append(pdf_text)
-
-                new_text = pdf_text.replace("Ostoja Tatić", "Tuta Bugarin")
-                
-                # page_object.merge_page(new_text)
-                print(new_text)
-
-                pdf_writer.add_page(page_object)
-
-
-                with open_atomic(new_file, "wb") as output_file:
-                    pdf_writer.write(output_file)
-                
-        finally:
-
-            pdf_data.close()
-
-r = read_pdf(pdf_path, new_file)
-# print(r)
-# write_pdf(r)
+modify_HTML(html_path, new_file_name)
