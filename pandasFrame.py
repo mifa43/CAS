@@ -41,7 +41,7 @@ def clean_data(path: str = None, row_number: int = 0):
     df = pd.read_excel(path)
 
     # Izbacivanje duplikata 
-    df.drop_duplicates()
+    
 
     # Formatiranje teksta u odgovarajućim stupcima
     df['Ime'] = df['Ime'].str.title()
@@ -50,6 +50,9 @@ def clean_data(path: str = None, row_number: int = 0):
     df['Grad'] = df['Grad'].str.title()
     df['Kampanja'] = df['Kampanja'].str.title()
 
+    df.drop_duplicates(inplace=True, subset=['Adresa'])
+    
+    print(df.head(20))
     # Prikaz formatiranog DataFrame-a
     for i in range(0, row_number):
         # Prikaz red po rednom broju 0:n
