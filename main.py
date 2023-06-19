@@ -1,15 +1,15 @@
 from bs4 import BeautifulSoup
 import random
-import pandas as pd
 from urllib.parse import quote
-
+from pandasFrame import pd_data, clean_data
 # AKO SE JAVI GRESKA SA NEKIM HTML DOKUMENTOM - PROVERI ELEMENT CLASS JER SE UVEK GENERESI NOVI CLASS I JEDINSTVEN JE | CANVA PDF
 
 # Kolko ljudi ce da se procita iz tabele, samim tim i generise pisma
-user_range = 5
+user_range = 2
 
 # Putanja do izvornog html-a od kog nastaju svi drugi html-ovi
 html_path = '/home/mifa43/Desktop/CAS/htmlStructure/jubilej-14.html'
+real_data = "SBB BROJEVI CELA SRBIJA/Fizicka lica/BG 3 sbb.xlsx"
 
 def randNum():
     """ ### Generator random brojeva
@@ -21,40 +21,11 @@ def randNum():
 
         return f"Vaša indentifikacija: {random_number}"
     
-
-def pd_data(row_number: int = 0) -> list:
-    """ ### Citanje podatka iz tabele
-    :param
-        - `row_number`: str = Koliko da se procita redova iz tabele
-    
-    """
-    list_row = []
-
-    # Učitavanje Excel fajla
-    df = pd.read_excel("data.ods")
-
-    for i in range(0, row_number):
-        # Prikaz red po rednom broju 0:n
-        prvi_red = df.iloc[i]
-
-        # lista alociranih podataka
-        list_row.append({
-            "ime": prvi_red["ime"],
-            "prezime": prvi_red["prezime"],
-            "adresa_stanovanja": prvi_red["adresa_stanovanja"],
-            "grad": prvi_red["grad"],
-            "mesto": prvi_red["mesto"],
-            "postanski_kod": prvi_red["postanski_kod"],
-            "pol": prvi_red["pol"]
-            })
-        
-    return list_row
-
 def modify_HTML(source_html: str, user_data: list, user_range: int):
     """ ### Funkcija koja generise novi html i menja vrednosti na osnovu dict mapper-a
     :param
         - `source_html`: str = Izvorni html kod
-        - `user_data`: list = Podatci iz data frejma  
+        - `user_data`: list = Podatci iz DataFrame-a  
         -  `user_range`: int = Isti broj kao i za pandas, koliko ce se html stranica generisati
     """
     # event_date = str(input("Unesi datum dogadjaja npr.('Subota 12.6.2023 u 18:00'): "))
@@ -69,9 +40,9 @@ def modify_HTML(source_html: str, user_data: list, user_range: int):
         mystr = randNum()
 
         # formatiranje teksta koji ce da se izmeni
-        text_id_1 = f'g. {user_data[index]["ime"]} {user_data[index]["prezime"]}'
-        text_id_2 = f'{user_data[index]["adresa_stanovanja"]}'
-        text_id_3 = f'{user_data[index]["postanski_kod"]} {user_data[index]["mesto"]}'
+        text_id_1 = f'g. {user_data[index]["Ime"]} {user_data[index]["Prezime"]}'
+        text_id_2 = f'{user_data[index]["Adresa"]}'
+        text_id_3 = f'{user_data[index]["Post Code"]} {user_data[index]["Kampanja"]}'
 
         #4,5,6,7 su informacije koje se nece toliko cesto menjati vec ce biti jednmom definisane
         # 9 je random generator, 10 je u kombinaciji npr. adresa grad i postanski kod
@@ -80,8 +51,8 @@ def modify_HTML(source_html: str, user_data: list, user_range: int):
         text_id_6 = f'Kralja Milana 35'
         text_id_7 = f'11000 Beograd'
 
-        text_id_8 = f'Vi g. {user_data[index]["prezime"]} ste među izabranima prvog kruga dodele poklona!'
-        text_id_11 = f'{user_data[index]["ime"].upper()} {user_data[index]["prezime"].upper()}'
+        text_id_8 = f'Vi g. {user_data[index]["Prezime"]} ste među izabranima prvog kruga dodele poklona!'
+        text_id_11 = f'{user_data[index]["Ime"].upper()} {user_data[index]["Prezime"].upper()}'
 
         # dict/json struktura kroz koju se pronalazi klasa kao i vrednost za izmenu
         mapped_html = {
@@ -153,7 +124,7 @@ def modify_HTML(source_html: str, user_data: list, user_range: int):
                 print(f'Nije pronadjen element sa klasom: {mapped_html[key]["class"]}, vrednost: {mapped_html[key]["new_value"]}')
 
         # Formatiranje putanje do foldera i generisanje imena datoteke | quote() resava UTF-8 enkodovanjwe
-        name = "/home/mifa43/Desktop/CAS/htmlOutput/" + quote(user_data[index]["ime"]) + " " + quote(user_data[index]["prezime"]) + quote(str(index))
+        name = "/home/mifa43/Desktop/CAS/htmlOutput/" + quote(user_data[index]["Ime"]) + " " + quote(user_data[index]["Prezime"]) + quote(str(index))
         # html ekstenzija
         name_path = name+".html"
         
@@ -162,6 +133,6 @@ def modify_HTML(source_html: str, user_data: list, user_range: int):
             file.write(str(soup))
 
 # Poziv funkcija
-user_data = pd_data(user_range)
+user_data = clean_data(real_data, user_range)
 
 modify_HTML(html_path, user_data, user_range)
