@@ -124,7 +124,7 @@ def modify_HTML(source_html: str, user_data: list, user_range: int):
                 print(f'Nije pronadjen element sa klasom: {mapped_html[key]["class"]}, vrednost: {mapped_html[key]["new_value"]}')
 
         # Formatiranje putanje do foldera i generisanje imena datoteke | quote() resava UTF-8 enkodovanjwe
-        name = "/home/mifa43/Desktop/CAS/htmlOutput/" + quote(user_data[index]["Ime"]) + " " + quote(user_data[index]["Prezime"]) + quote(str(index))
+        name = "/home/mifa43/Desktop/CAS/htmlOutput/" + quote(user_data[index]["Ime"]) + " " + quote(user_data[index]["Prezime"]) + " " + quote(str(index))
         # html ekstenzija
         name_path = name+".html"
         
