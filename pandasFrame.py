@@ -40,16 +40,14 @@ def clean_data(path: str = None, row_number: int = 0):
 
     df = pd.read_excel(path)
 
-    # Izbacivanje duplikata 
-    
-
     # Formatiranje teksta u odgovarajućim stupcima
     df['Ime'] = df['Ime'].str.title()
     df['Prezime'] = df['Prezime'].str.title()
     df['Adresa'] = df['Adresa'].str.title()
     df['Grad'] = df['Grad'].str.title()
     df['Kampanja'] = df['Kampanja'].str.title()
-
+    
+    # Izbacivanje duplikata 
     df.drop_duplicates(inplace=True, subset=['Adresa'])
     
     print(df.head(20))
