@@ -50,7 +50,7 @@ def clean_data(path: str = None, row_number: int = 0):
     # Izbacivanje duplikata 
     df.drop_duplicates(inplace=True, subset=['Adresa'])
     
-    print(df.head(20))
+    print(df.head(row_number))
     # Prikaz formatiranog DataFrame-a
     for i in range(0, row_number):
         # Prikaz red po rednom broju 0:n
