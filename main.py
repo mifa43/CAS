@@ -8,12 +8,12 @@ from crud import KontaktiDB
 # AKO SE JAVI GRESKA SA NEKIM HTML DOKUMENTOM - PROVERI ELEMENT CLASS JER SE UVEK GENERESI NOVI CLASS I JEDINSTVEN JE | CANVA PDF
 
 # Kolko ljudi ce da se procita iz tabele, samim tim i generise pisma
-user_range = int(input("Unesi broj koliko ce sa se generise dokumenta: "))
-grad_param = str(input("Unesi naziv grada: "))
-kampanja_param = str(input("Unesi naziv opstine samo za *Beograd: "))
+# user_range = int(input("Unesi broj koliko ce sa se generise dokumenta: "))
+# grad_param = str(input("Unesi naziv grada: "))
+# kampanja_param = str(input("Unesi naziv opstine samo za *Beograd: "))
 
 # Putanja do izvornog html-a od kog nastaju svi drugi html-ovi
-html_path = '/home/mifa43/Desktop/CAS/htmlStructure/jubilej-14.html'
+# html_path = '/home/mifa43/Desktop/CAS/htmlStructure/jubilej-14.html'
 real_data = "SBB BROJEVI CELA SRBIJA/Fizicka lica/BG 3 sbb.xlsx"
 
 def randNum():
@@ -186,4 +186,4 @@ def modify_HTML(source_html: str, user_range: int, grad: str = None, opstina: st
 # Poziv funkcija
 # user_data = clean_data(real_data, user_range)
 
-modify_HTML(html_path, user_range, grad_param, kampanja_param)
+# modify_HTML(html_path, user_range, grad_param, kampanja_param)
