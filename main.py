@@ -8,7 +8,9 @@ from crud import KontaktiDB
 # AKO SE JAVI GRESKA SA NEKIM HTML DOKUMENTOM - PROVERI ELEMENT CLASS JER SE UVEK GENERESI NOVI CLASS I JEDINSTVEN JE | CANVA PDF
 
 # Kolko ljudi ce da se procita iz tabele, samim tim i generise pisma
-user_range = 500
+user_range = int(input("Unesi broj koliko ce sa se generise dokumenta: "))
+grad_param = str(input("Unesi naziv grada: "))
+kampanja_param = str(input("Unesi naziv opstine samo za *Beograd: "))
 
 # Putanja do izvornog html-a od kog nastaju svi drugi html-ovi
 html_path = '/home/mifa43/Desktop/CAS/htmlStructure/jubilej-14.html'
@@ -24,7 +26,7 @@ def randNum():
 
         return random_number
     
-def modify_HTML(source_html: str, user_range: int):
+def modify_HTML(source_html: str, user_range: int, grad: str = None, opstina: str = ""):
     """ ### Funkcija koja generise novi html i menja vrednosti na osnovu dict mapper-a
     :param
         - `source_html`: str = Izvorni html kod
@@ -42,7 +44,7 @@ def modify_HTML(source_html: str, user_range: int):
     db = get_db()   
 
     # Vrati kontakt 
-    get_contacts = KontaktiDB(db).get_rows_by_number(user_range, grad_param="Beograd",kampanja_param=None)
+    get_contacts = KontaktiDB(db).get_rows_by_number(user_range, grad_param=grad,kampanja_param=opstina)
 
     # Nema vrednosti za dati parametar
     if get_contacts["succes"] == False:
@@ -84,7 +86,7 @@ def modify_HTML(source_html: str, user_range: int):
                     text_id_3 = f'{contact.post_code} {contact.grad.capitalize()}'  # Pord postanskog koda stoji i grad
 
                 else:
-                    text_id_3 = f'{contact.post_code} {contact.kampanja.capitalize()}' # Pord postanskog koda stoji i opstina samo ako je Beogrd
+                    text_id_3 = f'{contact.post_code} {contact.kampanja.capitalize()} {contact.grad.capitalize()}' # Pord postanskog koda stoji i opstina samo ako je Beogrd
                     
 
                 #4,5,6,7 su informacije koje se nece toliko cesto menjati vec ce biti jednmom definisane
@@ -102,47 +104,47 @@ def modify_HTML(source_html: str, user_range: int):
                 mapped_html = {
                     "target_tag": "div",
                     "target_1": {
-                        "class": "t m0 x12 h9 y14 ff1 fs2 fc0 sc0 ls5 ws2",
+                        "class": "t m0 x13 h9 y14 ff1 fs2 fc0 sc0 ls5 ws2",
                         "new_value": text_id_1,
                         },
                     "target_2": {
-                        "class": "t m0 x12 h9 y15 ff1 fs2 fc0 sc0 ls5 ws2",
+                        "class": "t m0 x13 h9 y15 ff1 fs2 fc0 sc0 ls5 ws2",
                         "new_value": text_id_2,
                         },
                     "target_3": {
-                        "class": "t m0 x12 h9 y16 ff1 fs2 fc0 sc0 ls5 ws2",
+                        "class": "t m0 x13 h9 y16 ff1 fs2 fc0 sc0 ls5 ws2",
                         "new_value": text_id_3,
                         },
                     "target_4": {
-                        "class": "t m0 xe h9 ye ff1 fs2 fc0 sc0 ls5 ws2",
+                        "class": "t m0 xf h9 ye ff1 fs2 fc0 sc0 ls5 ws2",
                         "new_value": text_id_4,
                         },
                     "target_5": {
-                        "class": "t m0 xe h9 yf ff1 fs2 fc0 sc0 ls5 ws2",
+                        "class": "t m0 xf h9 yf ff1 fs2 fc0 sc0 ls5 ws2",
                         "new_value": text_id_5,
                         },
                     "target_6": {
-                        "class": "t m0 xe h9 y10 ff1 fs2 fc0 sc0 ls5 ws2",
+                        "class": "t m0 xf h9 y10 ff1 fs2 fc0 sc0 ls5 ws2",
                         "new_value": text_id_6,
                         },
                     "target_7": {
-                        "class": "t m0 xe h9 y11 ff1 fs2 fc0 sc0 ls0 ws2",
+                        "class": "t m0 xf h9 y11 ff1 fs2 fc0 sc0 ls0 ws2",
                         "new_value": text_id_7,
                         },
                     "target_8": {
-                        "class": "t m0 x10 hd y18 ff1 fs5 fc0 sc0 ls5 ws2",
+                        "class": "t m0 x11 hd y18 ff1 fs5 fc0 sc0 ls5 ws2",
                         "new_value": text_id_8,
                         },
                     "target_9": {
-                        "class": "t m0 x10 hd y1d ff1 fs5 fc0 sc0 ls5 ws2",
+                        "class": "t m0 x11 hd y1c ff1 fs5 fc0 sc0 ls5 ws2",
                         "new_value": text_id_8,
                         },
                     "target_10": {
-                        "class": "t m0 x15 h10 y25 ff1 fs6 fc0 sc0 ls5 ws2",
+                        "class": "t m0 x16 h10 y24 ff1 fs6 fc0 sc0 ls5 ws2",
                         "new_value": text_id_9,
                         },
                     "target_11": {
-                        "class": "t m0 x15 h10 y27 ff1 fs6 fc0 sc0 ls5 ws2",
+                        "class": "t m0 x17 h10 y26 ff1 fs6 fc0 sc0 ls5 ws2",
                         "new_value": text_id_11,
                         }   
                 }
@@ -184,4 +186,4 @@ def modify_HTML(source_html: str, user_range: int):
 # Poziv funkcija
 # user_data = clean_data(real_data, user_range)
 
-modify_HTML(html_path, user_range)
+modify_HTML(html_path, user_range, grad_param, kampanja_param)
