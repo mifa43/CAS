@@ -25,7 +25,12 @@ def randNum():
         random_number = random.randint(10000, 999999)
 
         return random_number
-    
+def get_data():
+    # Sesija ka bazi
+    db = get_db()   
+    rows = KontaktiDB(db).get_all_rows()
+
+    return rows
 def modify_HTML(source_html: str, user_range: int, grad: str = None, opstina: str = ""):
     """ ### Funkcija koja generise novi html i menja vrednosti na osnovu dict mapper-a
     :param
