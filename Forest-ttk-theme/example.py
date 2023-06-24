@@ -16,7 +16,7 @@ module_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(module_path)
 
 # Sada možete importovati modul
-from main import modify_HTML
+from main import modify_HTML, get_data
 # Dobijanje apsolutne putanje do direktorijuma u kojem se nalazi trenutni fajl
 current_directory = os.path.dirname(os.path.abspath(__file__))
 
@@ -165,6 +165,19 @@ button.grid(row=6, column=0, padx=5, pady=10, sticky="nsew")
 # Accentbutton
 accentbutton = ttk.Button(widgets_frame, text="Generisi", style="Accent.TButton", command=retrieve_text)
 accentbutton.grid(row=7, column=0, padx=5, pady=10, sticky="nsew")
+def format_data():
+    all_rows = []
+    rows = get_data()
+    counter = 1
+    for i in rows:
+        # Define treeview data
+        treeview_data = [
+            ("", "end", counter, f"{i.ime}", (f"{i.prezime}", f"{i.adresa}", f"{i.grad}", f"{i.indentification_code}", f"{i.is_printed}"))
+        ]
+        all_rows.append(treeview_data)
+        counter += 1
+    # print(all_rows)
+    return all_rows
 
 # Togglebutton
 button = ttk.Checkbutton(widgets_frame, text="Prikazi podatke", style="ToggleButton")
@@ -191,7 +204,7 @@ treeScroll = ttk.Scrollbar(treeFrame)
 treeScroll.pack(side="right", fill="y")
 
 # Treeview
-treeview = ttk.Treeview(treeFrame, selectmode="extended", yscrollcommand=treeScroll.set, columns=(1, 2), height=12)
+treeview = ttk.Treeview(treeFrame, selectmode="extended", yscrollcommand=treeScroll.set, columns=(1, 2, 3, 4, 5), height=12)
 treeview.pack(expand=True, fill="both")
 treeScroll.config(command=treeview.yview)
 
@@ -199,50 +212,31 @@ treeScroll.config(command=treeview.yview)
 treeview.column("#0", width=120)
 treeview.column(1, anchor="w", width=120)
 treeview.column(2, anchor="w", width=120)
+treeview.column(3, anchor="w", width=120)  # Add a new column
+treeview.column(4, anchor="w", width=120)  # Add a new column
+treeview.column(5, anchor="w", width=120)  # Add a new column
 
 # Treeview headings
-treeview.heading("#0", text="Column 1", anchor="center")
-treeview.heading(1, text="Column 2", anchor="center")
-treeview.heading(2, text="Column 3", anchor="center")
+treeview.heading("#0", text="Ime", anchor="center")
+treeview.heading(1, text="Prezime", anchor="center")
+treeview.heading(2, text="adresa", anchor="center")
+treeview.heading(3, text="Grad", anchor="center")
+treeview.heading(4, text="Indentifikacija", anchor="center")
+treeview.heading(5, text="Stampan", anchor="center")
 
-# Define treeview data
-treeview_data = [
-    ("", "end", 1, "Parent", ("Item 1", "Value 1")),
-    (1, "end", 2, "Child", ("Subitem 1.1", "Value 1.1")),
-    (1, "end", 3, "Child", ("Subitem 1.2", "Value 1.2")),
-    (1, "end", 4, "Child", ("Subitem 1.3", "Value 1.3")),
-    (1, "end", 5, "Child", ("Subitem 1.4", "Value 1.4")),
-    ("", "end", 6, "Parent", ("Item 2", "Value 2")),
-    (6, "end", 7, "Child", ("Subitem 2.1", "Value 2.1")),
-    (6, "end", 8, "Sub-parent", ("Subitem 2.2", "Value 2.2")),
-    (8, "end", 9, "Child", ("Subitem 2.2.1", "Value 2.2.1")),
-    (8, "end", 10, "Child", ("Subitem 2.2.2", "Value 2.2.2")),
-    (8, "end", 11, "Child", ("Subitem 2.2.3", "Value 2.2.3")),
-    (6, "end", 12, "Child", ("Subitem 2.3", "Value 2.3")),
-    (6, "end", 13, "Child", ("Subitem 2.4", "Value 2.4")),
-    ("", "end", 14, "Parent", ("Item 3", "Value 3")),
-    (14, "end", 15, "Child", ("Subitem 3.1", "Value 3.1")),
-    (14, "end", 16, "Child", ("Subitem 3.2", "Value 3.2")),
-    (14, "end", 17, "Child", ("Subitem 3.3", "Value 3.3")),
-    (14, "end", 18, "Child", ("Subitem 3.4", "Value 3.4")),
-    ("", "end", 19, "Parent", ("Item 4", "Value 4")),
-    (19, "end", 20, "Child", ("Subitem 4.1", "Value 4.1")),
-    (19, "end", 21, "Sub-parent", ("Subitem 4.2", "Value 4.2")),
-    (21, "end", 22, "Child", ("Subitem 4.2.1", "Value 4.2.1")),
-    (21, "end", 23, "Child", ("Subitem 4.2.2", "Value 4.2.2")),
-    (21, "end", 24, "Child", ("Subitem 4.2.3", "Value 4.2.3")),
-    (19, "end", 25, "Child", ("Subitem 4.3", "Value 4.3"))
-    ]
 
+treeview_data = format_data()
 # Insert treeview data
-for item in treeview_data:
-    treeview.insert(parent=item[0], index=item[1], iid=item[2], text=item[3], values=item[4])
-    if item[0] == "" or item[2] in (8, 12):
-        treeview.item(item[2], open=True) # Open parents
-
+# Insert treeview data
+for i in range(1, len(treeview_data)):
+    for item in treeview_data[i]:
+        # print(item)
+        treeview.insert(parent=item[0], index=item[1], iid=item[2], text=item[3], values=item[4])
+        if item[0] == "" or item[2] in (8, 12):
+            treeview.item(item[2], open=True) # Open parents
 # Select and scroll
-treeview.selection_set(10)
-treeview.see(7)
+treeview.selection_set()
+treeview.see(20)
 
 # Pane #2
 pane_2 = ttk.Frame(paned)
