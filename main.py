@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 import random
 from urllib.parse import quote
 from pandasFrame import pd_data, clean_data
+
 # AKO SE JAVI GRESKA SA NEKIM HTML DOKUMENTOM - PROVERI ELEMENT CLASS JER SE UVEK GENERESI NOVI CLASS I JEDINSTVEN JE | CANVA PDF
 
 # Kolko ljudi ce da se procita iz tabele, samim tim i generise pisma
