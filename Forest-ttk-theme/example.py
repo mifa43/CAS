@@ -179,8 +179,18 @@ def format_data():
     # print(all_rows)
     return all_rows
 
+def set_data():
+    treeview_data = format_data()
+    # Insert treeview data
+    for i in range(1, len(treeview_data)):
+        for item in treeview_data[i]:
+            # print(item)
+            treeview.insert(parent=item[0], index=item[1], iid=item[2], text=item[3], values=item[4])
+            if item[0] == "" or item[2] in (8, 12):
+                treeview.item(item[2], open=True) # Open parents
+    return treeview
 # Togglebutton
-button = ttk.Checkbutton(widgets_frame, text="Prikazi podatke", style="ToggleButton")
+button = ttk.Checkbutton(widgets_frame, text="Prikazi podatke", style="ToggleButton", command=set_data)
 button.grid(row=8, column=0, padx=5, pady=10, sticky="nsew")
 
 # Switch
@@ -225,15 +235,9 @@ treeview.heading(4, text="Indentifikacija", anchor="center")
 treeview.heading(5, text="Stampan", anchor="center")
 
 
-treeview_data = format_data()
+
 # Insert treeview data
-# Insert treeview data
-for i in range(1, len(treeview_data)):
-    for item in treeview_data[i]:
-        # print(item)
-        treeview.insert(parent=item[0], index=item[1], iid=item[2], text=item[3], values=item[4])
-        if item[0] == "" or item[2] in (8, 12):
-            treeview.item(item[2], open=True) # Open parents
+treeview_data = set_data()
 # Select and scroll
 treeview.selection_set()
 treeview.see(20)
