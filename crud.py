@@ -48,13 +48,14 @@ class KontaktiDB():
         '''
         try:
             kampanja_param = kampanja_param.upper()
+            grad_param = grad_param.capitalize()
             # Ako je grad_param jednak None onda trazimo vrednost po kampanja_param parametru
             if grad_param == None:
 
                 rows = self.db.query(Kontakti_sbb).filter(Kontakti_sbb.kampanja == kampanja_param).limit(number)  
 
             # Ako je kampanja_param jednak None onda trazimo vrednost po grad_param parametru
-            elif kampanja_param == None:
+            elif kampanja_param == None or kampanja_param == "":
 
                 rows = self.db.query(Kontakti_sbb).filter(Kontakti_sbb.grad == grad_param).limit(number)
             
