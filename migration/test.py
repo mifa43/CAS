@@ -3,7 +3,7 @@ from crud import KontaktiDB
 
 db = get_db()
 
-usr = KontaktiDB(db).get_rows_by_number(100, grad_param="Novi sad",kampanja_param=None)
+usr = KontaktiDB(db).get_rows_by_number(100, grad_param="Mladenovac",kampanja_param=None)
 
 if usr["succes"] == False:
 
@@ -12,7 +12,8 @@ if usr["succes"] == False:
 else:
 
     for i in usr["result"]:
-        print([i.ime, 
+        print([i.id,
+            i.ime, 
             i.prezime, 
             i.adresa, 
             i.post_code, 
