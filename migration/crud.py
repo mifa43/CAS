@@ -74,3 +74,19 @@ class KontaktiDB():
         except:
             
             print("Something wet wrong")
+
+    def update_by_id(self, row_id):
+        #dodata metoda koja za vracene kontakte updejtuje is_printed na str 'True'
+        try:
+            row = self.db.query(Kontakti_sbb).filter_by(id=row_id).first()
+
+            if row is None:
+                raise ValueError("Nije pronađen red sa ID-jem: " + str(row_id))
+
+            row.is_printed = "True"
+            self.db.commit()
+
+            return row
+
+        except Exception as e:
+            print({"row_id": row_id, "message": "Greška prilikom ažuriranja: " + str(e)})
