@@ -25,6 +25,10 @@ def randNum():
         random_number = random.randint(10000, 999999)
 
         return random_number
+
+def count_rows():
+    pass
+
 def get_data():
     # Sesija ka bazi
     db = get_db()   
