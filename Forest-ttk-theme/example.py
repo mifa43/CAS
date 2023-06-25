@@ -27,7 +27,7 @@ tcl_file_path = os.path.join(current_directory, "forest-dark.tcl")
 html_path = '/home/mifa43/Desktop/CAS/htmlStructure/jubilej-14.html'
 
 root = tk.Tk()
-root.title("Forest")
+root.title("Clean Air Solution")
 root.option_add("*tearOff", False) # This is always a good idea
 
 # Make the app responsive
@@ -46,7 +46,6 @@ style = ttk.Style(root)
 root.tk.call("source", tcl_file_path)
 # Set the theme with the theme_use method
 style.theme_use("forest-dark")
-
 # Create lists for the Comboboxes
 option_menu_list = ["", "OptionMenu", "Option 1", "Option 2"]
 combo_list = [
@@ -159,11 +158,11 @@ def clear_text():
     combobox.delete(0, tk.END)
 
 # Button
-button = ttk.Button(widgets_frame, text="Ponisti unose", command=clear_text)
+button = ttk.Button(widgets_frame, text="Poništi unose", command=clear_text)
 button.grid(row=6, column=0, padx=5, pady=10, sticky="nsew")
 
 # Accentbutton
-accentbutton = ttk.Button(widgets_frame, text="Generisi", style="Accent.TButton", command=retrieve_text)
+accentbutton = ttk.Button(widgets_frame, text="Generiši", style="Accent.TButton", command=retrieve_text)
 accentbutton.grid(row=7, column=0, padx=5, pady=10, sticky="nsew")
 def format_data():
     all_rows = []
@@ -181,6 +180,7 @@ def format_data():
 
 def set_data():
     treeview_data = format_data()
+    treeview.delete(*treeview.get_children())  # Briše postojeće podatke iz stabla
     # Insert treeview data
     for i in range(1, len(treeview_data)):
         for item in treeview_data[i]:
@@ -188,13 +188,12 @@ def set_data():
             treeview.insert(parent=item[0], index=item[1], iid=item[2], text=item[3], values=item[4])
             if item[0] == "" or item[2] in (8, 12):
                 treeview.item(item[2], open=True) # Open parents
-    return treeview
 # Togglebutton
-button = ttk.Checkbutton(widgets_frame, text="Prikazi podatke", style="ToggleButton", command=set_data)
+button = ttk.Checkbutton(widgets_frame, text="Prikaži podatke", style="ToggleButton", command=set_data)
 button.grid(row=8, column=0, padx=5, pady=10, sticky="nsew")
 
 # Switch
-switch = ttk.Checkbutton(widgets_frame, text="Da, istampan", style="Switch")
+switch = ttk.Checkbutton(widgets_frame, text="Da, ištampan", style="Switch")
 switch.grid(row=9, column=0, padx=5, pady=10, sticky="nsew")
 
 # Panedwindow
@@ -237,10 +236,10 @@ treeview.heading(5, text="Stampan", anchor="center")
 
 
 # Insert treeview data
-treeview_data = set_data()
+# treeview_data = set_data()
 # Select and scroll
 treeview.selection_set()
-treeview.see(20)
+# treeview.see(20)
 
 # Pane #2
 pane_2 = ttk.Frame(paned)
@@ -258,6 +257,7 @@ tab_1.rowconfigure(index=1, weight=1)
 notebook.add(tab_1, text="Tab 1")
 
 # Scale
+
 scale = ttk.Scale(tab_1, from_=100, to=0, variable=g, command=lambda event: g.set(scale.get()))
 scale.grid(row=0, column=0, padx=(20, 10), pady=(20, 0), sticky="ew")
 
@@ -266,7 +266,7 @@ progress = ttk.Progressbar(tab_1, value=0, variable=g, mode="determinate")
 progress.grid(row=0, column=1, padx=(10, 20), pady=(20, 0), sticky="ew")
 
 # Label
-label = ttk.Label(tab_1, text="Forest ttk theme", justify="center")
+label = ttk.Label(tab_1, text="Broj redova: ", justify="center")
 label.grid(row=1, column=0, pady=10, columnspan=2)
 
 # Tab #2
