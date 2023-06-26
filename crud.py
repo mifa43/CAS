@@ -52,12 +52,12 @@ class KontaktiDB():
             # Ako je grad_param jednak None onda trazimo vrednost po kampanja_param parametru
             if grad_param == None:
 
-                rows = self.db.query(Kontakti_sbb).filter(Kontakti_sbb.kampanja == kampanja_param).limit(number)  
+                rows = self.db.query(Kontakti_sbb).filter(Kontakti_sbb.kampanja == kampanja_param, Kontakti_sbb.is_printed == "False").limit(number)  
 
             # Ako je kampanja_param jednak None onda trazimo vrednost po grad_param parametru
             elif kampanja_param == None or kampanja_param == "":
 
-                rows = self.db.query(Kontakti_sbb).filter(Kontakti_sbb.grad == grad_param).limit(number)
+                rows = self.db.query(Kontakti_sbb).filter(Kontakti_sbb.grad == grad_param, Kontakti_sbb.is_printed == "False").limit(number)
             
             # Ako je grad_param jednak Beograd tek tada mozemo i da trazimo opstine jer kampanja postoji samo za Beograd
             elif grad_param == "Beograd":
@@ -65,7 +65,10 @@ class KontaktiDB():
                 # Ako su grad_param i kampanja_param vece duzine od 0 trazimo po oba zadata parametra
                 if grad_param and len(grad_param) > 0 or kampanja_param and len(kampanja_param) > 0:
 
-                    rows = self.db.query(Kontakti_sbb).filter(Kontakti_sbb.grad == grad_param, Kontakti_sbb.kampanja == kampanja_param).limit(number)
+                    rows = self.db.query(Kontakti_sbb).filter(Kontakti_sbb.grad == grad_param, 
+                                                              Kontakti_sbb.kampanja == kampanja_param, 
+                                                              Kontakti_sbb.is_printed == "False"
+                                                              ).limit(number)
 
             # Ako je rows jednak 0 to znaci da nista nije pronadjeno od zazdatih parametra
             if rows.count() == 0:
