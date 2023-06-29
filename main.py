@@ -4,6 +4,7 @@ from urllib.parse import quote
 from pandasFrame import pd_data, clean_data
 from database import get_db
 from crud import KontaktiDB
+import pandas as pd
 
 # AKO SE JAVI GRESKA SA NEKIM HTML DOKUMENTOM - PROVERI ELEMENT CLASS JER SE UVEK GENERESI NOVI CLASS I JEDINSTVEN JE | CANVA PDF
 
@@ -54,7 +55,18 @@ def modify_HTML(source_html: str, user_range: int, grad: str = None, opstina: st
 
     # Vrati kontakt 
     get_contacts = KontaktiDB(db).get_rows_by_number(user_range, grad_param=grad,kampanja_param=opstina)
-
+    contacts_df = pd.DataFrame(columns=['ID', 
+                                    'Ime', 
+                                    'Prezime', 
+                                    'Adresa', 
+                                    'Poštanski broj', 
+                                    'Grad', 
+                                    'Telefon', 
+                                    'Kampanja', 
+                                    'Naziv tabele', 
+                                    'Identifikacioni kod', 
+                                    'Štampano'
+                                    ])
     # Nema vrednosti za dati parametar
     if get_contacts["succes"] == False:
 
@@ -182,15 +194,32 @@ def modify_HTML(source_html: str, user_range: int, grad: str = None, opstina: st
                 name = "/home/mifa43/Desktop/CAS/htmlOutput/" + quote(contact.ime) + " " + quote(contact.prezime) + " " + quote(str(contact.id))
                 # html ekstenzija
                 name_path = name+".html"
-                
+
+                                # Dodajte red u DataFrame
+                row = pd.DataFrame({
+                    'ID': [contact.id],
+                    'Ime': [contact.ime],
+                    'Prezime': [contact.prezime],
+                    'Adresa': [contact.adresa],
+                    'Poštanski broj': [contact.post_code],
+                    'Grad': [contact.grad],
+                    'Telefon': [contact.telefon],
+                    'Kampanja': [contact.kampanja],
+                    'Naziv tabele': [contact.table_name],
+                    'Identifikacioni kod': [contact.indentification_code],
+                    'Štampano': [contact.is_printed]
+                })
+                contacts_df = pd.concat([contacts_df, row], ignore_index=True)
+
                 with open(name_path, "w", encoding="UTF-8") as file:
                     # Cuvanje novo modifikovanih fajlova
                     file.write(str(soup))
-                        
+                
             else:
 
                 print(f"Person with id {contact.id} for grad: {contact.grad} is  alredy printed!")
-
+    excel_path = f'/home/mifa43/Desktop/CAS/{grad}' + '.xlsx'
+    contacts_df.to_excel(excel_path, index=False)
 
 # Poziv funkcija
 # user_data = clean_data(real_data, user_range)
